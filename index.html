@@ -2,6 +2,27 @@
 <html>
 <head>
     <title>Input Output Test</title>
+    <script>
+    window.onload = function() {
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the form from being submitted normally
+
+            var myInput = document.getElementById('myInput').value;
+
+            // Replace with your PythonAnywhere URL and the correct endpoint
+            var url = 'http://yourusername.pythonanywhere.com/your-endpoint?input=' + encodeURIComponent(myInput);
+
+            // Use the fetch API to send a request to your PythonAnywhere application
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Display the result in the "result" div
+                    document.getElementById('result').innerText = data.result;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    };
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
