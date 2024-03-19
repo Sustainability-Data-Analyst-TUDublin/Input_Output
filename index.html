@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,3 +60,64 @@
     </div>
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Input Output Test</title>
+    <script>
+    window.onload = function() {
+        document.getElementById('myForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent the form from being submitted normally
+
+            var myInput = document.getElementById('myInput').value;
+
+            // Replace with your PythonAnywhere URL and the correct endpoint
+            var url = 'https://sustainabilitydataanalyst.pythonanywhere.com/your-endpoint?input=' + encodeURIComponent(myInput);
+            //var url = 'https://www.pythonanywhere.com/user/SustainabilityDataAnalyst/files/home/SustainabilityDataAnalyst/Input_Output/flask_app.py?input=' + encodeURIComponent(myInput);
+            
+            // Use the fetch API to send a request to your PythonAnywhere application
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    // Display the result in the "result" div
+                    document.getElementById('result').innerText = data.result;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    };
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to My Page!</h1>
+        <p>This is a test page hosted on GitHub Pages. </p>
+        <p>Use text box below to do the test.</p>
+    
+    <p>
+    <form id="myForm">
+        <input type="text" id="myInput" name="myInput">
+        <input type="submit">
+    </form>
+    </p>
+    <p id="result">
+    </p>
+    
+</body>
+</html>
+>>>>>>> eb04a454d9c7f3319a503dbeee1c2483feed9a5f
