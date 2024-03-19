@@ -5,45 +5,46 @@
     <script>
     window.onload = function() {
         document.getElementById('myForm').addEventListener('submit', function(event) {
-            event.preventDefault();  // Prevent the form from being submitted normally
+            event.preventDefault(); // Prevent the form from being submitted normally
 
             var myInput = document.getElementById('myInput').value;
+            var url = 'https://SustainabilityDataAnalyst.pythonanywhere.com/your-endpoint?input=' + encodeURIComponent(myInput);
 
-            // Replace with your PythonAnywhere URL and the correct endpoint
-            //var url = 'http://SustainabilityDataAnalyst.pythonanywhere.com/Input_Output/flask_app?input=' + encodeURIComponent(myInput);
-            var url = 'https://www.pythonanywhere.com/user/SustainabilityDataAnalyst/files/home/SustainabilityDataAnalyst/Input_Output/flask_app.py?input=' + encodeURIComponent(myInput);
-            
-            // Use the fetch API to send a request to your PythonAnywhere application
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
-                    // Display the result in the "result" div
                     document.getElementById('result').innerText = data.result;
+                    // Show validation buttons
+                    document.getElementById('validationButtons').style.display = 'block';
                 })
                 .catch(error => console.error('Error:', error));
         });
+
+        // Add event listeners for validation buttons
+        document.getElementById('agreeButton').addEventListener('click', function() {
+            validateResult('agree');
+        });
+
+        document.getElementById('disagreeButton').addEventListener('click', function() {
+            validateResult('disagree');
+        });
     };
+
+    function validateResult(validationType) {
+        // Here you could send the validation result back to your server
+        console.log('Validation result:', validationType);
+        // Optionally, hide validation buttons after selection
+        document.getElementById('validationButtons').style.display = 'none';
+    }
     </script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        .container {
-            text-align: center;
-        }
+        /* Your existing styles */
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Welcome to My Page!</h1>
-        <p>This is a test page hosted on GitHub Pages. Use text box below to do the test.</p>
+        <p>This is a test page hosted on GitHub Pages. Use the text box below to do the test.</p>
     </div>
     <br>
     <form id="myForm">
@@ -51,6 +52,10 @@
         <input type="submit">
     </form>
     <div id="result"></div>
-    
+    <!-- Validation buttons, initially hidden -->
+    <div id="validationButtons" style="display: none;">
+        <button id="agreeButton">Tick (Agree)</button>
+        <button id="disagreeButton">Cross (Disagree)</button>
+    </div>
 </body>
 </html>
