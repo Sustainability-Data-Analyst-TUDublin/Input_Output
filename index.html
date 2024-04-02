@@ -8,16 +8,24 @@
             event.preventDefault(); // Prevent the form from being submitted normally
 
             var myInput = document.getElementById('myInput').value;
-            var url = 'https://SustainabilityDataAnalyst.pythonanywhere.com/your-endpoint?input=' + encodeURIComponent(myInput);
+            var url = 'https://SustainabilityDataAnalyst.pythonanywhere.com/analyze'; // Updated URL to match Flask endpoint
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('result').innerText = data.result;
-                    // Show validation buttons
-                    document.getElementById('validationButtons').style.display = 'block';
-                })
-                .catch(error => console.error('Error:', error));
+            fetch(url, {
+                method: 'POST', // Change to POST method
+                headers: {
+                    'Content-Type': 'application/json', // Specify JSON content type
+                },
+                body: JSON.stringify({ text: myInput }) // Send input text as JSON
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Update this part to display your analysis results
+                // Example: Assuming data is an array of probabilities
+                document.getElementById('result').innerText = 'Analysis Result: ' + JSON.stringify(data);
+                // Show validation buttons
+                document.getElementById('validationButtons').style.display = 'block';
+            })
+            .catch(error => console.error('Error:', error));
         });
 
         // Add event listeners for validation buttons
@@ -37,9 +45,6 @@
         document.getElementById('validationButtons').style.display = 'none';
     }
     </script>
-    <style>
-        /* Your existing styles */
-    </style>
 </head>
 <body>
     <div class="container">

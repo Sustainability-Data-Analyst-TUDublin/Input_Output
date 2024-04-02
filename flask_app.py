@@ -1,23 +1,30 @@
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
+import torch
 from flask import Flask, request, jsonify
+from torch.nn.functional import softmax
 
 app = Flask(__name__)
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    return response
+# Adjust these paths if necessary
+model_path = "./final_saved_model_multi"
 
-@app.route('/your-endpoint')
+tokenizer = AutoTokenizer.from_pretrained(model_path)
+model = AutoModelForSequenceClassification.from_pretrained(model_path)
+
+@app.route('/')
+def home():
+    return "Model loaded and ready to analyze text!"
+
+@app.route('/analyze', methods=['POST'])
 def analyze_text():
-    input_text = request.args.get('input')
-    num_words = len(input_text.split())
-    return jsonify(result=f'The input contains {num_words} words.')
+    data = request.json
+    text = data['text']
+    inputs = tokenizer(text, return_tensors="pt", padding=True, truncation=True, max_length=512)
 
-# Add a new route for handling validations
-@app.route('/validate-result', methods=['POST'])
-def validate_result():
-    data = request.get_json()
-    validation_type = data.get('validationType')
-    # Here you would process the validation result, e.g., store it in a database
-    print(f'Received validation: {validation_type}')
-    return jsonify(status='success')
+    with torch.no_grad():
+        outputs = model(**inputs)
+        logits = outputs.logits
+        probabilities = softmax(logits, dim=1).tolist()
+
+    # Assuming you want to return the probabilities
+    return jsonify(probabilities)
